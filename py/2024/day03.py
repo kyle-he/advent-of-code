@@ -1,3 +1,6 @@
+# Day       Time  Rank  Score       Time  Rank  Score
+#   3   00:00:31     5     96   00:06:37   446      0
+
 import itertools
 import functools
 from collections import defaultdict, deque, Counter
