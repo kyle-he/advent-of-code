@@ -19,6 +19,9 @@ from pprint import pprint
 sys.setrecursionlimit(100000)
 T = typing.TypeVar("T")
 
+AIR = "."
+WALL = "#"
+
 UP = (-1, 0)
 DOWN = (1, 0)
 LEFT = (0, -1)
@@ -27,10 +30,6 @@ RIGHT = (0, 1)
 #region List/Vector operations
 GRID_DELTA = [[-1, 0], [1, 0], [0, -1], [0, 1]]  # Up, Down, Left, Right
 OCT_DELTA = [[1, 1], [-1, -1], [1, -1], [-1, 1]] + GRID_DELTA  # Diagonals + orthogonals
-
-DIAG = [[1, 1], [-1, -1]]
-ANTI_DIAG = [[1, -1], [-1, 1]]
-DIAG_DELTA = DIAG + ANTI_DIAG  # Diagonals
 
 CHAR_TO_DELTA = {
     "U": [-1, 0],
@@ -102,35 +101,6 @@ def neighbours(coord, dims, deltas) -> typing.List[typing.List[int]]:
         if all(0 <= c < c_max for c, c_max in zip(new_coord, dims)):
             out.append(new_coord)
     return out
-
-def lget(l, i):
-    """
-    Access nested lists using a list of indices.
-    Example: lget(matrix, [2,3]) = matrix[2][3]
-    """
-    if len(l) == 2: return l[i[0]][i[1]]
-    for index in i: l = l[index]
-    return l
-
-def lset(l, i, v):
-    """
-    Set a value in nested lists using a list of indices.
-    Example: lset(matrix, [2,3], val) sets matrix[2][3]=val
-    """
-    if len(l) == 2:
-        l[i[0]][i[1]] = v
-        return
-    for index in i[:-1]:
-        l = l[index]
-    l[i[-1]] = v
-
-def points_sub_min(points):
-    """
-    Rebases a set of points so that the smallest coordinate in each dimension is 0.
-    Useful for normalizing point sets.
-    """
-    m = [min(p[i] for p in points) for i in range(len(points[0]))]
-    return [psub(p, m) for p in points]
 
 def points_to_grid(points, sub_min=True, flip=True):
     """
@@ -209,14 +179,6 @@ def pdist2(v):
     Euclidean distance from v to the origin.
     """
     return math.sqrt(pdist2sq(v))
-
-def pdistinf(x, y=None):
-    """
-    Chebyshev (L-infinity) distance between x and y or between x and 0 if y is None.
-    The max absolute difference in any dimension.
-    """
-    if y is not None: x = psub(x, y)
-    return max(map(abs, x))
 
 def signum(n: int) -> int:
     """

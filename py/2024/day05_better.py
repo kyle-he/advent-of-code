@@ -1,14 +1,14 @@
-# Day       Time  Rank  Score       Time  Rank  Score
-#   5   00:01:33    75     26   00:03:32    90     11
-
 import itertools
 import functools
 from collections import defaultdict, deque, Counter
 import math
 import re
 
-from common.input import split_blocks, split_lines
-from common.utils import lmap
+from common.parse import *
+from common.list import *
+from common.utils import *
+from common.grid import *
+from common.algos import *
 
 def p1(f):
     rules, updates = map(split_lines, split_blocks(f.read()))

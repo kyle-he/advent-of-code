@@ -7,11 +7,11 @@ from collections import defaultdict, deque, Counter
 import math
 import re
 
+from common.parse import *
 from common.list import *
-from common.grid import *
 from common.utils import *
+from common.grid import *
 from common.algos import *
-from common.dict import *
 
 def p1(f):
     grid = Grid(parse_grid(f.read()))

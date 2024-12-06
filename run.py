@@ -5,7 +5,7 @@ import traceback
 from datetime import datetime, timedelta, timezone
 from importlib import import_module, reload
 
-# solution wrapping stolen from https://github.com/oliver-ni/advent-of-code/tree/master
+# run.py taken from https://github.com/oliver-ni/advent-of-code/tree/master
 
 def run(func, filename="filename"):
     try:

@@ -1,18 +1,14 @@
-# Day       Time  Rank  Score       Time  Rank  Score
-#   4   00:01:09    68     33   00:40:12  4972      0
-
 import itertools
 import functools
 from collections import defaultdict, deque, Counter
 import math
 import re
 
+from common.parse import *
 from common.list import *
-from common.grid import *
 from common.utils import *
+from common.grid import *
 from common.algos import *
-from common.dict import *
-from common.input import *
 
 def p1(f):
     grid = Grid(parse_grid(f.read()))
