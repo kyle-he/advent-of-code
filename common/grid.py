@@ -21,6 +21,10 @@ from pprint import pprint
 sys.setrecursionlimit(100000)
 T = typing.TypeVar("T")
 
+class COORD(tuple):
+    def __add__(self, other):
+        return COORD(x + y for x, y in zip(self, other))
+
 class Grid(typing.Generic[T]):
     """
     A simple 2D grid wrapper.
@@ -60,6 +64,8 @@ class Grid(typing.Generic[T]):
 
     # funny things
     def get(self, coord):
+        if not self.in_bounds(*coord):
+            return None
         return self[coord]
 
     def transpose(self) -> "Grid[T]":

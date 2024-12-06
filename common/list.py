@@ -26,10 +26,19 @@ UP = (-1, 0)
 DOWN = (1, 0)
 LEFT = (0, -1)
 RIGHT = (0, 1)
+UP_RIGHT = (-1, 1)
+UP_LEFT = (-1, -1)
+DOWN_RIGHT = (1, 1)
+DOWN_LEFT = (1, -1)
 
 #region List/Vector operations
 GRID_DELTA = [[-1, 0], [1, 0], [0, -1], [0, 1]]  # Up, Down, Left, Right
-OCT_DELTA = [[1, 1], [-1, -1], [1, -1], [-1, 1]] + GRID_DELTA  # Diagonals + orthogonals
+OCT_DELTA = [
+    [1, 1],    # Diagonal: Down-Right
+    [-1, -1],  # Diagonal: Up-Left
+    [1, -1],   # Diagonal: Up-Right
+    [-1, 1]    # Diagonal: Down-Left
+] + GRID_DELTA  # Diagonals + orthogonals
 
 CHAR_TO_DELTA = {
     "U": [-1, 0],
@@ -101,6 +110,21 @@ def neighbours(coord, dims, deltas) -> typing.List[typing.List[int]]:
         if all(0 <= c < c_max for c, c_max in zip(new_coord, dims)):
             out.append(new_coord)
     return out
+
+def make_grid(*dimensions: typing.List[int], fill=None):
+    """
+    Creates a multi-dimensional list (grid) of given dimensions, filled with a specified value.
+    For example, make_grid(3,4, fill=0) returns a 3x4 grid filled with 0s.
+    Useful for 2D or N-D puzzles.
+    """
+    if len(dimensions) == 1:
+        return [fill for _ in range(dimensions[0])]
+    next_down = make_grid(*dimensions[1:], fill=fill)
+    return [copy.deepcopy(next_down) for _ in range(dimensions[0])]
+
+def points_sub_min(points):
+    m = [min(p[i] for p in points) for i in range(len(points[0]))]
+    return [psub(p, m) for p in points]
 
 def points_to_grid(points, sub_min=True, flip=True):
     """

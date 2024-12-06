@@ -26,6 +26,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run Advent of Code solutions.")
     parser.add_argument("--year", "-y", type=int, help="The year to run.", default=now.year)
     parser.add_argument("--day", "-d", type=int, help="The day to run.", default=now.day)
+    parser.add_argument("--test", "-t", help="Run the test cases.", action="store_true")
     parser.add_argument("--extra", "-e", help="Choose a different solution to run.")
     args = parser.parse_args()
 
@@ -64,5 +65,7 @@ if __name__ == "__main__":
         print("sample:", end="\t")
         run(getattr(module, i), f"input/{args.year}/day{args.day:02}_sample.txt")
         reload(module)
-        print("input:", end="\t")
-        run(getattr(module, i), f"input/{args.year}/day{args.day:02}.txt")
+
+        if not args.test:
+            print("input:", end="\t")
+            run(getattr(module, i), f"input/{args.year}/day{args.day:02}.txt")
