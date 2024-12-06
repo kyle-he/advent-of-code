@@ -65,11 +65,9 @@ def p2(f):
     path.append(path[0])
 
     # shoelace formula
-    area = 0.5 * abs(
-        functools.reduce(
-            lambda acc, i: acc + (path[i][0] * path[i + 1][1] - path[i][1] * path[i + 1][0]),
-            range(len(path) - 1),
-            0
-        )
-    )
+    area = 0
+    for a, b in itertools.pairwise(path):
+        area += a[0] * b[1] - a[1] * b[0]
+    area = abs(area) / 2
+
     return int(area) - (len(path) // 2) + 1
