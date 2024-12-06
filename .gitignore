@@ -2,6 +2,7 @@ token
 .DS_Store
 **/2022/
 **/2023/
+token2id.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
