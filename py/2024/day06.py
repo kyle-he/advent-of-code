@@ -34,6 +34,8 @@ def p1(f):
 
     return len(visited)
 
+
+# todo: figure out how to speed this up, maybe rewrite in rust?
 def p2(f):
     grid = Grid(parse_grid(f.read()))
 
