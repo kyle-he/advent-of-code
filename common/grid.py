@@ -31,9 +31,14 @@ class Grid(typing.Generic[T]):
     Provides bounds checking and coordinate iteration.
     """
     def __init__(self, grid: typing.List[typing.List[T]]) -> None:
-        self.grid = grid
+        self.grid = copy.deepcopy(grid)
         self.rows = len(self.grid)
         self.cols = len(self.grid[0])
+    
+    # def set_grid(self, grid):
+    #     self.grid = copy.deepcopy(grid.grid)
+    #     self.rows = len(self.grid)
+    #     self.cols = len(self.grid[0])
     
     def coords(self) -> typing.List[typing.List[int]]:
         """
@@ -41,11 +46,11 @@ class Grid(typing.Generic[T]):
         """
         return [[r, c] for r in range(self.rows) for c in range(self.cols)]
     
-    def get_row(self, row: int):
-        """
-        Asserts row is in range. Simple sanity check.
-        """
-        assert 0 <= row < self.rows, f"row {row} is OOB"
+    def get_rows(self):
+        return [list(row) for row in self.grid]
+    
+    def get_cols(self):
+        return [list(col) for col in zip(*self.grid)]
     
     def in_bounds(self, row: int, col: int) -> bool:
         """
@@ -75,19 +80,28 @@ class Grid(typing.Generic[T]):
         transposed = [list(row) for row in zip(*self.grid)]
         return Grid(transposed)
     
-    def rotate_right(self) -> "Grid[T]":
+    def rotate_right(self):
         """
         Rotate the grid 90 degrees clockwise.
         """
         rotated = [list(row) for row in zip(*self.grid[::-1])]
         return Grid(rotated)
     
-    def rotate_left(self) -> "Grid[T]":
-        """
-        Rotate the grid 90 degrees counterclockwise.
-        """
-        rotated = [list(row) for row in zip(*self.grid)][::-1]
-        return Grid(rotated)
+    # def rotate_right(self) -> "Grid[T]":
+    #     """
+    #     Rotate the grid 90 degrees clockwise.
+    #     """
+    #     rotated = [list(row) for row in zip(*self.grid[::-1])]
+    #     return Grid(rotated)
+    
+    # def rotate_left(self) -> "Grid[T]":
+    #     """
+    #     Rotate the grid 90 degrees counterclockwise.
+    #     """
+    #     rotated = [list(row)[::-1] for row in zip(*self.grid)] 
+    #     rotated = [list(row)[::-1] for row in zip(*rotated)] 
+    #     rotated = [list(row)[::-1] for row in zip(*rotated)] 
+    #     return Grid(rotated)
     
     def find(self, value: T) -> typing.Tuple[typing.Tuple[int, int]]:
         """

@@ -147,6 +147,60 @@ def dijkstra(
     
     return (g_values, parents)
 
+import heapq
+import typing
+from typing import Callable, Dict, Iterable, List, Optional, Tuple, TypeVar
+
+def rust_dijkstra(
+    from_nodes,  # List of (initial_cost, starting_node)
+    expand: Callable[[T], Iterable[Tuple[int, T]]],
+    predicate: Optional[Callable[[T], bool]] = None,
+    heuristic: Optional[Callable[[T], int]] = None,
+) -> Tuple[Dict[T, int], Dict[T, T], Optional[T]]:
+    """
+    Modified Dijkstra's / A* algorithm to find the best path fulfilling a predicate,
+    with support for multiple starting nodes.
+    expand(node) -> Iterable[(cost, successor_node)]
+    If heuristic is provided, runs A* search.
+    Returns (distances, parents, best_node) where best_node is the node that satisfies the predicate with the least cost.
+    Use path_from_parents to reconstruct the path.
+    """
+    if heuristic is None:
+        heuristic = lambda _: 0
+
+    seen = set()
+    g_values = {}
+    parents = {}
+
+    todo = []
+    for start_node in from_nodes:
+        g_values[start_node] = 0
+        heapq.heappush(todo, (heuristic(start_node), 0, start_node))
+    
+    best_node = None
+    best_cost = float('inf')
+
+    while todo:
+        f, g, node = heapq.heappop(todo)
+        if node in seen:
+            continue
+        seen.add(node)
+
+        # Check the predicate for the current node
+        if predicate is not None and predicate(node):
+            if g < best_cost:
+                best_node = node
+                best_cost = g
+
+        for cost, new_node in expand(node):
+            new_g = g + cost
+            if new_node not in g_values or new_g < g_values[new_node]:
+                parents[new_node] = node
+                g_values[new_node] = new_g
+                heapq.heappush(todo, (new_g + heuristic(new_node), new_g, new_node))
+    
+    return (g_values, parents, best_node)
+
 def a_star(
     from_node: T,
     expand: typing.Callable[[T], typing.Iterable[typing.Tuple[int, T]]],
