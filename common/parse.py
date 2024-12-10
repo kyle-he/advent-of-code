@@ -1,21 +1,14 @@
-def parse_grid_dict(input):
-    # make a dictionary of (x, y) -> value
-    # return rows and cols too
-
+def parse_grid_dict(input, func=lambda x: x):
+    grid = {}
     for y, line in enumerate(input.splitlines()):
         for x, c in enumerate(line.strip()):
-            grid[(x, y)] = c
-    
+            grid[(x, y)] = func(c)
     return grid
 
-def parse_grid(input):
-    # make a 2d array of values
-    # return rows and cols too
-
+def parse_grid(input, func=lambda x: x):
     grid = []
     for line in input.splitlines():
-        grid.append(list(line))
-    
+        grid.append([func(c) for c in line.strip()])
     return grid
 
 def parse_blocks(input):
