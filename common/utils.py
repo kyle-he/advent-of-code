@@ -212,55 +212,89 @@ class RepeatingSequence:
         cycle_offset = (index - self.cycle_begin) % self.cycle_length
         return self.index_to_result[self.cycle_begin + cycle_offset]
 
-class UnionFind:
-    """
-    Union-Find (Disjoint Set Union) data structure.
-    Efficiently merges sets and finds representatives.
-    Useful for connected components in graphs or grouping tasks.
-    """
+# class UnionFind:
+#     """
+#     Union-Find (Disjoint Set Union) data structure.
+#     Efficiently merges sets and finds representatives.
+#     Useful for connected components in graphs or grouping tasks.
+#     """
 
-    def __init__(self, n: int) -> None:
-        self.n = n
-        self.parents = [None] * n
-        self.ranks = [1] * n
-        self.num_sets = n
+#     def __init__(self, n: int) -> None:
+#         self.n = n
+#         self.parents = [None] * n
+#         self.ranks = [1] * n
+#         self.num_sets = n
     
-    def find(self, i: int) -> int:
-        """
-        Find the representative (root) of the set containing i.
-        Uses path compression.
-        """
-        p = self.parents[i]
-        if p is None:
-            return i
-        p = self.find(p)
-        self.parents[i] = p
-        return p
+#     def find(self, i: int) -> int:
+#         """
+#         Find the representative (root) of the set containing i.
+#         Uses path compression.
+#         """
+#         p = self.parents[i]
+#         if p is None:
+#             return i
+#         p = self.find(p)
+#         self.parents[i] = p
+#         return p
     
-    def in_same_set(self, i: int, j: int) -> bool:
-        """
-        Checks if i and j belong to the same set.
-        """
-        return self.find(i) == self.find(j)
+#     def in_same_set(self, i: int, j: int) -> bool:
+#         """
+#         Checks if i and j belong to the same set.
+#         """
+#         return self.find(i) == self.find(j)
     
-    def merge(self, i: int, j: int) -> None:
-        """
-        Merges the sets containing i and j.
-        """
-        i = self.find(i)
-        j = self.find(j)
+#     def merge(self, i: int, j: int) -> None:
+#         """
+#         Merges the sets containing i and j.
+#         """
+#         i = self.find(i)
+#         j = self.find(j)
 
-        if i == j:
-            return
+#         if i == j:
+#             return
         
-        i_rank = self.ranks[i]
-        j_rank = self.ranks[j]
+#         i_rank = self.ranks[i]
+#         j_rank = self.ranks[j]
 
-        if i_rank < j_rank:
-            self.parents[i] = j
-        elif i_rank > j_rank:
-            self.parents[j] = i
-        else:
-            self.parents[j] = i
-            self.ranks[i] += 1
-        self.num_sets -= 1
+#         if i_rank < j_rank:
+#             self.parents[i] = j
+#         elif i_rank > j_rank:
+#             self.parents[j] = i
+#         else:
+#             self.parents[j] = i
+#             self.ranks[i] += 1
+#         self.num_sets -= 1
+
+class UnionFind:
+    def __init__(self):
+        self.parent = {}
+        self.rank = {}
+        self.set_count = 0
+
+    def find(self, x):
+        if x not in self.parent:
+            self.parent[x] = x
+            self.rank[x] = 0
+            self.set_count += 1
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])  # Path compression
+        return self.parent[x]
+
+    def union(self, x, y):
+        root_x = self.find(x)
+        root_y = self.find(y)
+
+        if root_x != root_y:
+            # Union by rank
+            if self.rank[root_x] > self.rank[root_y]:
+                self.parent[root_y] = root_x
+            elif self.rank[root_x] < self.rank[root_y]:
+                self.parent[root_x] = root_y
+            else:
+                self.parent[root_y] = root_x
+                self.rank[root_x] += 1
+            self.set_count -= 1
+
+    def num_sets(self):
+        # Count the number of unique sets
+        return self.set_count

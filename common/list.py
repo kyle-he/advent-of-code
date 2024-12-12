@@ -41,6 +41,11 @@ OCT_DELTA = [
     [-1, 1]    # Diagonal: Down-Left
 ] + GRID_DELTA  # Diagonals + orthogonals
 
+DIAG = [[1, 1],    # Diagonal: Down-Right
+    [-1, -1],  # Diagonal: Up-Left
+    [1, -1],   # Diagonal: Up-Right
+    [-1, 1]]    # Diagonal: Down-Left
+
 CHAR_TO_DELTA = {
     "U": [-1, 0],
     "R": [0, 1],
